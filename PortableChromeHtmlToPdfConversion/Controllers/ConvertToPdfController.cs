@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 
 namespace PortableChromeHtmlToPdfConversion.Controllers
@@ -12,7 +10,7 @@ namespace PortableChromeHtmlToPdfConversion.Controllers
         [HttpGet]
         public async Task<IActionResult> GeneratePdf()
         {
-            var chromePath = Path.Combine(@"C:\Users\AdorijanCizmar\Desktop\PortableChrome\App\Chrome-bin\chrome.exe");
+            var chromePath = Path.Combine(@"Path-to\chrome.exe");
             var options = new LaunchOptions
             {
                 ExecutablePath = chromePath,
@@ -22,7 +20,7 @@ namespace PortableChromeHtmlToPdfConversion.Controllers
             using (var browser = await Puppeteer.LaunchAsync(options))
             {
                 using var page = await browser.NewPageAsync();
-                var path = @"C:\Users\AdorijanCizmar\Documents\Repos\PortableChromeHtmlToPdfConversion\PortableChromeHtmlToPdfConversion\PortableChromeHtmlToPdfConversion\HtmlTemplate\CustomHtml(1).html";
+                var path = @"Path-to\Html-Template.html";
                 var html = await System.IO.File.ReadAllTextAsync(path);
 
                 await page.SetContentAsync(html);
@@ -32,7 +30,7 @@ namespace PortableChromeHtmlToPdfConversion.Controllers
                 var pdfStream = await page.PdfStreamAsync();
                 pdfStream.CopyTo(stream);
 
-                return File(stream.ToArray(), "application/pdf", "ChromePrintTest.pdf");
+                return File(stream.ToArray(), "application/pdf", "Document-Name.pdf");
             }
         }
     }
